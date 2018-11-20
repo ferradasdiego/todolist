@@ -1,0 +1,70 @@
+/* Main */
+body{
+    width: 100%;
+    height: 100%;
+}
+
+#cabecera{
+    width: 90%;
+    height: 10%;
+    border: 1px solid black;
+    border-bottom: 0px;
+    background-color: bisque;
+    display: flex;
+    justify-content: space-between;
+    
+}
+
+#cabecera h1{
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+#cabecera button{
+    height: 50%;
+    margin-top: 23%;
+    margin-bottom: 23%;
+}
+
+#introducir{
+    width: 89%;
+    background-color: aquamarine;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    padding-left: 1%;
+    border: 1px solid black;
+}
+
+#introducir #campo{
+    height: 100px;
+}
+
+#herramientas{
+    background-color: yellowgreen;
+    width: 90%;
+    border-bottom:1px solid black;
+    border-right:1px solid black;
+    border-left:1px solid black;
+    display: flex;
+    justify-content: center;
+}
+
+#tareas{
+    width: 90%;
+    border: 1px solid black;
+    border-top: 0px;
+    background-color: coral
+}
+
+#tareas button{
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    background-image: url(./img/update.png);
+    background-repeat:no-repeat;
+    background-position:center;
+}
+
+.tarea{
+    width: 100%;
+}
