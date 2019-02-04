@@ -7,6 +7,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <?php
 	session_start();
 	if(isset($_SESSION["user"]) && isset($_SESSION["id"])){
@@ -18,13 +19,13 @@
 
 </head>
 <body>
-    <h1>Tareas</h1>
-    <div>
+    <h1 class="container">Tareas</h1>
+    <div class="container">
         <h3>Login</h3>
         <form action="./index.php" method="post">
             <input name="user" type="text" placeholder="usuario">
             <input name="passwd" type="password" placeholder="contraseña">
-            <input type="submit">
+            <button type="submit" class="btn btn-primary">Log In</button>
         </form>
         <p></p>
         <button><a href="./registro.php">Registrarse</a></button>
@@ -61,7 +62,7 @@
                                 $_SESSION["id"]=$devolucion["id"];
                                 header("location: ./index.php");
                             }else{
-                                echo"error";
+                                echo"<br>Ups....<br>Has introducido mal el nombre de usuario o la contraseña";
                             }
                         }
                     }

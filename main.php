@@ -1,3 +1,46 @@
+<?php
+session_start();
+require('./db.php');
+
+if(!isset($_SESSION["user"]) && !isset($_SESSION["id"])){
+    header("location: ./index.php");
+}
+//Saludo
+    if(isset($_SESSION["user"]) && isset($_SESSION["id"])){
+        $usuario=$_SESSION["user"];
+    }
+//Cerrar Sesión
+    if(isset($_GET["logout"])){
+        session_start();
+        session_destroy();
+        unset($_SESSION['user']);
+        unset($_SESSION['id']);
+        header("location:./index.php");
+    }
+    
+    if(isset($_GET["borrar"])){
+        $q = "DELETE FROM `chores` WHERE `id_tarea` = '".$_GET["borrar"]."'";
+        $r = mysqli_query($ms, $q);
+        if ( !$r ){
+            echo "<br>ERROR EN LA INSERCION";
+        }else{
+            header("location: ./main.php");
+        }
+    }
+
+    if(isset($_GET["completar"])){
+        // UPDATE MyGuests SET lastname='Doe' WHERE id=2
+        $q = "UPDATE `chores` SET clase= 'completada' WHERE `id_tarea` = '".$_GET["completar"]."'";
+        $r = mysqli_query($ms, $q);
+        if ( !$r ){
+            echo "<br>ERROR EN LA INSERCION";
+        }else{
+            header("location: ./main.php");
+        }
+    }
+    
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,46 +51,26 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <link rel="stylesheet" href="style.css">
-    <?php
-    session_start();
-
-    if(!isset($_SESSION["user"]) && !isset($_SESSION["id"])){
-        header("location: ./index.php");
-    }
-	?>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <title>Tareas</title>
 </head>
 <body>
     <div id="cabecera">
        <h1>Main</h1> 
-        <?php
-
-        //Saludo
-            if(isset($_SESSION["user"]) && isset($_SESSION["id"])){
-                echo "<div><h3>Bienvenido ".$_SESSION["user"]."</h3></div>";
-            }
-        //Cerrar Sesión
-            if(isset($_GET["logout"])){
-				session_start();
-				session_destroy();
-				unset($_SESSION['user']);
-				unset($_SESSION['id']);
-				header("location:./index.php");
-            }
-            
-        ?>
+       <div><h3>Bienvenido <?php echo $usuario;?></h3></div>
         <div>
-            <button><a href="./main.php?logout">Cerrar Sesión</a> </button>
+            <button class="btn btn-warning" id="logout">Cerrar Sesión</button>
         </div>
     </div>
 
     <div id="introducir">
-        <form action="./main.php" method="post">
-            <input type="text" name="titulo" placeholder="Introduce el titulo de tu tarea">
-            <input id="campo" type="text" name="cuerpo" placeholder="Introduce tu tarea">
-            <input type="submit">
+        <form action="./main.php" method="post" id="formulario">
+            <input type="text" name="titulo" placeholder="Introduce el titulo de tu tarea" style="width:60%; border:1px solid black">
+            <!-- <input id="campo" type="text" name="cuerpo" placeholder="Introduce tu tarea"> -->
+            <button type="submit" class="btn btn-primary">Publicar Tarea</button>
         </form>
-            <!-- <textarea name="" id="" cols="30" rows="10"></textarea> -->
+        <textarea rows="4" cols="50" name="cuerpo" id="campo" form="formulario" style="width:60%; padding:0px; border:1px solid black">Introduce el cuerpo de tu tarea.</textarea>
+
     </div>
 
     <div id="herramientas">
@@ -59,7 +82,7 @@
         
         <?php
         //Cargar las tareas al entrar en la página
-            require('./db.php');
+            
 
             $q = "SELECT * FROM `chores` WHERE `id_user` = '".$_SESSION["id"]."'";				
             $r = mysqli_query($ms, $q);
@@ -70,20 +93,35 @@
                     echo"Aún no hay tareas";
                 }else{                       
 
-                    while($resultado=mysqli_fetch_assoc($r)){   //mientras hay usuarios por mostrar 
-                        echo "<div class='tarea' id='".$resultado['id_tarea']."'>";
-                        echo "<u>".$resultado["titulo"]."</u>: ";
-                        echo "<br>";
-                        echo $resultado["cuerpo"];
-                        echo "<input type='checkbox' name='checkbox'></div><hr>";
+                    while($resultado=mysqli_fetch_assoc($r)){   //mientras hay tareas por mostrar 
+
+                        if($resultado['clase']!="completada"){
+                            echo "<div class='tarea' id='".$resultado['id_tarea']."'>";
+                            echo "<u class='".$resultado['clase']."'>".$resultado["titulo"]."</u>: ";
+                            echo "<br>";
+                            echo "<p class='".$resultado['clase']."'>".$resultado['cuerpo']."</p>";
+                            echo "<button href='./main.php?completar=".$resultado['id_tarea']."' class='completar btn btn-success' id='".$resultado['id_tarea']."'>Completar Tarea</button><button type='button' class='borrar btn btn-danger' href='./main.php?borrar=".$resultado['id_tarea']."' id='".$resultado['id_tarea']."'>Borrar Tarea</button></div><hr>";
+                        }else{
+                            echo "<div class='tarea' id='".$resultado['id_tarea']."'>";
+                            echo "<u class='".$resultado['clase']."'>".$resultado["titulo"]."</u>: ";
+                            echo "<br>";
+                            echo "<p class='".$resultado['clase']."'>".$resultado['cuerpo']."</p>";
+                            echo "<button type='button' class='borrar btn btn-danger' id='".$resultado['id_tarea']."'>Borrar Tarea</button></div><hr>";
+                        }
                     }
                 }
             }
+
         //************************************
 
         //Introducir una nota en la bd
         if(isset($_POST["titulo"])&&isset($_POST["cuerpo"])){
-            $q = "INSERT INTO `chores` (`id_user`,`titulo`,`cuerpo`) VALUES ('".$_SESSION["id"]."','".$_POST["titulo"]."','".$_POST["cuerpo"]."')";
+            if($_POST["titulo"]!=""){
+                $q = "INSERT INTO `chores` (`id_user`,`titulo`,`cuerpo`) VALUES ('".$_SESSION["id"]."','".$_POST["titulo"]."','".$_POST["cuerpo"]."')";
+            }else{
+                $q = "INSERT INTO `chores` (`id_user`,`titulo`,`cuerpo`) VALUES ('".$_SESSION["id"]."','Titulo por defecto','".$_POST["cuerpo"]."')";
+            }
+            
             $r = mysqli_query($ms, $q);
             if ( !$r ){
                 echo "<br>ERROR EN LA INSERCION";
@@ -92,15 +130,30 @@
             }
         }
         //*****************************
+
+
+      
         ?>
-        <!-- Borrar nota -->
         <script>
-            $("#borrar").click(function(){
-                // borro todas las tareas en las que su checkbox esté marcada
+            $(document).ready(function(){
+                $(".borrar").click(function(){
+                    var id=$(this).attr("id")
+                    window.location.assign("./main.php?borrar="+id)
+                })
+
+                $(".completar").click(function(){
+                    var id=$(this).attr("id")
+                    window.location.assign("./main.php?completar="+id)
+                })
+
+                $("#logout").click(function(){
+                    window.location.assign("./main.php?logout")
+                })
             })
         </script>
-        
+
     </div>
-    
+
 </body>
+
 </html>

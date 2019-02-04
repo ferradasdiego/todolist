@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <?php
 	session_start();
 	if(isset($_SESSION["user"]) && isset($_SESSION["id"])){
@@ -16,13 +17,13 @@
 
 </head>
 <body>
-    <h1>Tareas</h1>
-    <div>
+    <h1 class="container">Tareas</h1>
+    <div class="container">
         <h3>Registro</h3>
         <form action="./registro.php" method="post">
             <input name="user" type="text" placeholder="usuario">
             <input name="passwd" type="password" placeholder="contraseña">
-            <input type="submit">
+            <button type="submit" class="btn btn-primary">Registrarse</button>
         </form>
         <p></p>
         <button><a href="./index.php">Loguearse</a></button>
@@ -41,7 +42,7 @@
                     }else{
                         if ( mysqli_num_rows($r)>0 ){	
 
-                            echo'ERROR: El usuario introducido ya está en uso.<br>Por favor, intentalo con otro usuario.';
+                            echo'<br>Lo sentimos :( <br>El usuario introducido ya está en uso.<br>Por favor, intentalo con otro nombre de usuario.';
                         }else{
 
                             $hashed_password = crypt($_POST["passwd"],"abc");//encripto la contraseña, el salt es abc(sin salt da error)

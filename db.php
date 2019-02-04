@@ -7,10 +7,10 @@
 		
 		// Configuración de nuestro servidor y base de datos MySQL
 
-		$host = "localhost";
-		$user = "root";
-		$pass = "";
-		$db   = "tareas";
+		$host = "q7cxv1zwcdlw7699.chr7pe7iynqr.eu-west-1.rds.amazonaws.com";
+		$user = "nsn4zf9336cdwk9t";
+		$pass = "x0qw2s8u0ed81xqy";
+		$db   = "sffhhad2bphoe6d5";
 
 		//**********************//
 		// columnas de la tabla://
