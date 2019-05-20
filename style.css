@@ -27,20 +27,27 @@ body{
     margin-bottom: 23%;
 }
 
+.navbar{
+    background-color:#3B5998;
+    margin-bottom: 0px !important;
+}
+
 #introducir{
-    width: 99%;
-    background-color: aquamarine;
+    width: 100%;
+    /* background-color: #206BDC; */
+    background-color:#3B5998;
     padding-top: 1%;
     padding-bottom: 1%;
     padding-left: 1%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
+    margin-bottom: 10px;
 }
 
 #introducir #campo{
     height: 100px;
 }
 
-#herramientas{
+/* #herramientas{
     background-color: yellowgreen;
     width: 99%;
     border-bottom:1px solid black;
@@ -48,17 +55,18 @@ body{
     border-left:1px solid black;
     display: flex;
     justify-content: center;
-}
+} */
 
-#tareas{
+/* #tareas{
     width: 99%;
     border: 1px solid black;
     border-top: 0px;
     background-color: coral
-}
+} */
 
 .tarea{
-    width: 100%;
+    width: 98%;
+    margin-right: 1%
 }
 
 .completada{
@@ -172,3 +180,17 @@ body {
     color: white;
     background-color: #3b5998;
 }
+
+a {
+    cursor: pointer;
+}
+
+#navs{
+    margin-left: 1%;
+    display: flex;
+}
+
+.opciones{
+    margin:5%;
+}
+

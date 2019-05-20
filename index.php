@@ -1,23 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
 
-    <?php
-session_start();
-if (isset($_SESSION["user"]) && isset($_SESSION["id"])) {
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+  <link rel="stylesheet" href="./style.css">
+
+  <?php
+  session_start();
+  if (isset($_SESSION["user"]) && isset($_SESSION["id"])) {
     header("location: ./main.php");
-}
-?>
-    <title>Document</title>
+  }
+  ?>
+  <title>Document</title>
 </head>
+
 <body>
   <div class="container">
     <div class="row">
@@ -48,37 +50,38 @@ if (isset($_SESSION["user"]) && isset($_SESSION["id"])) {
   </div>
   <?php
 
-require './db.php';
+  require './db.php';
 
-if (isset($_POST["user"]) && isset($_POST["passwd"])) {
+  if (isset($_POST["user"]) && isset($_POST["passwd"])) {
 
-  if ($_POST["user"] != "" && $_POST["passwd"] != "") {
+    if ($_POST["user"] != "" && $_POST["passwd"] != "") {
 
-    $q = "SELECT * FROM `users` WHERE `user` = '" . $_POST["user"] . "'";
-    $r = mysqli_query($ms, $q);
+      $q = "SELECT * FROM `users` WHERE `user` = '" . $_POST["user"] . "'";
+      $r = mysqli_query($ms, $q);
 
-    if (!$r) {
-      echo "<br>ERROR EN CONSULTA: ";
-    } else {
-      if (mysqli_num_rows($r) < 1) {
-        echo '<script>alert("ERROR: Email o contraseña no son correctos. Por favor, prueba otra vez.")</script>';
+      if (!$r) {
+        echo "<br>ERROR EN CONSULTA: ";
       } else {
-
-        $devolucion = mysqli_fetch_assoc($r); //lo transforma en un array
-
-        if (hash_equals($devolucion["password"], crypt($_POST["passwd"], $devolucion["password"]))) { //si el hash de la nueva es igual al has guardado de la vieja
-          print_r("Te has logueado " . $devolucion["user"] . "");
-          $_SESSION["user"] = $devolucion["user"];
-          $_SESSION["id"] = $devolucion["id"];
-          header("location: ./index.php");
+        if (mysqli_num_rows($r) < 1) {
+          echo '<script>alert("ERROR: Email o contraseña no son correctos. Por favor, prueba otra vez.")</script>';
         } else {
-          echo "<br>Ups....<br>Has introducido mal el nombre de usuario o la contraseña";
+
+          $devolucion = mysqli_fetch_assoc($r); //lo transforma en un array
+
+          if (hash_equals($devolucion["password"], crypt($_POST["passwd"], $devolucion["password"]))) { //si el hash de la nueva es igual al has guardado de la vieja
+            print_r("Te has logueado " . $devolucion["user"] . "");
+            $_SESSION["user"] = $devolucion["user"];
+            $_SESSION["id"] = $devolucion["id"];
+            header("location: ./index.php");
+          } else {
+            echo "<br>Ups....<br>Has introducido mal el nombre de usuario o la contraseña";
+          }
         }
       }
     }
   }
-}
 
-?>
+  ?>
 </body>
+
 </html>
