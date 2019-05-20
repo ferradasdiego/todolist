@@ -3,3 +3,7 @@
 .icon-trash-1:before { content: '\e801'; } /* '' */
 .icon-thumbs-up:before { content: '\e802'; } /* '' */
 .icon-check:before { content: '\e803'; } /* '' */
+.icon-cog:before { content: '\e804'; } /* '' */
+.icon-user:before { content: '\e805'; } /* '' */
+.icon-list-bullet:before { content: '\f0ca'; } /* '' */
+.icon-user-times:before { content: '\f235'; } /* '' */
